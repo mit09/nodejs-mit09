@@ -142,32 +142,32 @@ app.post("/player", function (req, res) {
 
 //update a player
 app.put("/player/:id", function (req, res) {
-    PlayerModel.update({ _id: req.params.id }, { $set: req.body }, function (err, numberOfRowsUpdated) {
-        if (!err) {
-            console.log('player updated:' + req.body);
-        } else if (err) {
-            console.log(err);
-        }
-        PlayerModel.find(function (err, data) {
-            res.json(data);
-        });
-    });
-    //PlayerModel.findById(req.params.id, function (err, player) {
-    //    player.username = req.body.username;
-    //    player.age = req.body.age;
-    //    player.team = req.body.team;
-
-    //    player.save(function (err) {
-    //        if (!err) {
-    //            console.log('Player updated to:' + player);
-    //        } else if (err) {
-    //            console.log(err);
-    //        }
-    //        PlayerModel.find(function (err, data) {
-    //            res.json(data);
-    //        })
+    //PlayerModel.findByIdAndUpdate(req.params.id , req.body, function (err, numberOfRowsUpdated) {
+    //    if (!err) {
+    //        console.log('player updated:' + req.body);
+    //    } else if (err) {
+    //        console.log(err);
+    //    }
+    //    PlayerModel.find(function (err, data) {
+    //        res.json(data);
     //    });
     //});
+    PlayerModel.findById(req.params.id, function (err, player) {
+        player.username = req.body.username;
+        player.age = req.body.age;
+        player.team = req.body.team;
+
+        player.save(function (err) {
+            if (!err) {
+                console.log('Player updated to:' + player);
+            } else if (err) {
+                console.log(err);
+            }
+            PlayerModel.find(function (err, data) {
+                res.json(data);
+            })
+        });
+    });
 });
 
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
