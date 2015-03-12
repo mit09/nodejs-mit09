@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+
+    <script src="javascript/jquery/jquery-1.11.2.min.js"></script>
+    <script src="javascript/bootstrap/bootstrap.js"></script>
+
+    <script src="javascript/angular/angular.min.js"></script>
+    <script src="javascript/angular/angular-route.min.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+
+
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/codesnippets/sons-of-obsidian.css" />
+    
+    <script src="javascript/angular/1.js"></script>
+    
+    <script src="javascript/bootstrap/bootstrap.js"></script>
+    </head>
+    <body ng-app="HelloWorldApp">
+        
+        <h1>Add using NodeJS</h1>
+
+        <div ng-controller="HelloWorldController" ng-init="getDev()">
+            <table class="table table-striped">
+                
+                <tbody>
+                    <tr>
+                        <td>
+                            <input class="form-control" ng-model="player.username" placeholder="player name" />
+                        </td>
+                        <td>
+                            <input class="form-control" ng-model="player.age" placeholder="age" />
+                        </td>
+                        <td>
+                            <input class="form-control" ng-model="player.team" placeholder="team" />
+                        </td>
+                        <td>
+                            <button class="btn btn-success pull-right" ng-click="addUser(player)">
+                                <span class="glyphicon glyphicon-ok-sign"></span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr ng-repeat="player in players">
+
+                        <td>{{player.username}}</td>
+                        <td>{{player.age}}</td>
+                        <td>{{player.team}}</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+    </body>
+</html>

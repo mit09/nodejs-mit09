@@ -8,56 +8,67 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(multer()); // for parsing multipart/form-data
 
+
 app.use(express.static(__dirname + '/public'));
 
-var developer = [
-    { username: 'Alice', age: 25, application: [{ name: 'word' }, { name: 'excel' }, { name: 'ppt' }] },
-    { username: 'Bob', age: 28, application: [] },
-    { username: 'Charlie', age: 30, application: [] },
+var players = [
+    { username: 'Lionel Messi', age: 27, team: 'F.C. Barcelona' },
+    { username: 'Cristiano Ronaldo', age: 30, team: 'Real Madrid' },
+    { username: 'Wayne Rooney', age: 29, team: 'Manchester United' },
 ];
 
-/*var path = require("path");
-app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname + '/public/index.html'));
-});*/
-
-app.get("/developers", function (req, res) {
-    res.json(developer);
+app.get('/hello', function (req, res) {
+    res.send("HelloWorld");
 });
 
-app.get("/developers/:index", function (req, res) {
+var path = require('path');
+app.get('/read', function (req, res) {    
+    res.sendFile(path.join(__dirname+'/public/1.html'));
+});
+
+app.get('/add', function (req, res) {
+    res.sendFile(path.join(__dirname + '/public/add.html'));
+});
+
+app.get('/update', function (req, res) {
+    res.sendFile(path.join(__dirname + '/public/update.html'));
+});
+
+app.get("/player", function (req, res) {
+    res.json(players);
+});
+
+app.get("/player/:index", function (req, res) {
     
     var idx = req.params.index;
-    res.json(developer[idx]);
+    res.json(players[idx]);
 });
 
-app.get("/developers/:index/application", function (req, res) {
+app.get("/player/:index/team", function (req, res) {
     var idx = req.params.index;
-    res.json(developer[idx].application);
+    res.json(players[idx].team);
 });
 
-app.get("/developers/:index/application/:applicationIndex", function (req, res) {
+app.delete("/player/:index", function (req, res) {
     var idx = req.params.index;
-    var appIndex = req.params.applicationIndex;
-    res.json(developer[idx].application[appIndex]);
-});
-
-app.delete("/developers/:index", function (req, res) {
-    var idx = req.params.index;
-    developer.splice(idx, 1);
-    res.json(developer);
+    players.splice(idx, 1);
+    res.json(players);
 })
 
-app.post("/developers", function (req, res) {
-    var newDeveloper = req.body;
-    developer.push(newDeveloper)
-    res.json(developer);
+app.post("/player", function (req, res) {
+    var newPlayer = req.body;
+    players.push(newPlayer)
+    res.json(players);
 });
 
-app.put("/developers/:selectedIndex", function (req, res) {
+app.put("/player/:selectedIndex", function (req, res) {
     var selectedIndex = req.params.selectedIndex;
-    var newDeveloper = req.body;
-    developer[selectedIndex] = newDeveloper;
-    res.json(developer);
+    var newPlayer = req.body;
+    players[selectedIndex] = newPlayer;
+    res.json(players);
 });
-app.listen(3000);
+
+var ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
+var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
+
+app.listen(port, ipaddress);

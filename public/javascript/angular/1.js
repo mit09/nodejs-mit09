@@ -4,41 +4,40 @@
 app.controller("HelloWorldController", function ($scope,$http) {
     $scope.msg = 'Hello from controller';
 
-    $scope.addUser = function (developer) {
-        console.log(developer.application[0])
-       $http.post("/developers" ,developer)
+    $scope.addUser = function (player) {
+       $http.post("/player" ,player)
        .success(function (response) {
-           $scope.developers = response;
+           $scope.players = response;
         });
-       $scope.developer = new Object();
+       $scope.player = new Object();
     }
 
     $scope.getDev = function () {
-        $http.get('/developers')
+        $http.get('/player')
         .success(function (response) {
-            $scope.developers = response
-            console.log($scope.developers);
+            $scope.players = response
+            console.log($scope.players);
         });
     }
 
     $scope.delete = function (index) {
-        $http.delete('/developers/' + index)
+        $http.delete('/player/' + index)
         .success(function (response) {
-            $scope.developers = response;
+            $scope.players = response;
         });
     }
 
-    
     $scope.selectedIndex = null;
     $scope.edit = function (index) {
-        $scope.developer = $scope.developers[index];
+        $scope.player = $scope.players[index];
         $scope.selectedIndex = index;
     }
+
     $scope.updateUser = function () {
-        $http.put('/developers/' + $scope.selectedIndex, $scope.developer)
+        $http.put('/player/' + $scope.selectedIndex, $scope.player)
         .success(function (response) {
-            $scope.developers = response;
+            $scope.players = response;
         });
-        $scope.developer = new Object();
+        $scope.player = new Object();
     }
 });
