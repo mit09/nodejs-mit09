@@ -21,14 +21,6 @@ var playerSchema = new mongoose.Schema({
 
 var PlayerModel = mongoose.model("player", playerSchema);
 
-var userSchema = new mongoose.Schema({
-    username: String,
-    password: String,
-}, { collection: "user" });
-
-var UserModel = mongoose.model("user", userSchema);
-
-
 app.use(express.static(__dirname + '/public'));
 
 app.use(bodyParser.json()); // for parsing application/json
@@ -40,83 +32,37 @@ app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
 
-/**********LOGIN**********/
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-var cookieParser = require('cookie-parser');
-var session = require('express-session');
-
-app.use(session({ secret: 'this is the secret' }));
-app.use(cookieParser())
-app.use(passport.initialize());
-app.use(passport.session());
-
-/* Create a local strategy to login user with credentials stored in mongodb*/
+/*When server gets username password*/
 passport.use(new LocalStrategy(
-function (username, password, done) {
+    function (username, password, done) {
+        if (username == passport) {
+            /*User authenticated: done(err, response)*/
+            done(null, {username: username})
+        } else {
+            /*User denied: done(err, response)*/
+            done(null, false);
+        }
+    }
+));
 
-    UserModel.findOne({ username: username, password: password }, function (err, user) {
-        if (err) { return done(err); }
-        if (!user) { return done(null, false); }
-        return done(null, user);
-    })
-}));
-
+/*Serialize a cookie*/
 passport.serializeUser(function (user, done) {
     done(null, user);
 });
 
+/*Deserialize a cookie*/
 passport.deserializeUser(function (user, done) {
     done(null, user);
 });
 
-/* Login user*/
-app.post("/login", passport.authenticate('local'), function (req, res) {
+/*Passport is used as filter: if the user is found, passport puts it in the request*/
+app.post('/login', passport.authenticate('local'), function (req, res) {
     var user = req.user;
     console.log(user);
     res.json(user);
 });
 
-app.get('/loggedin', function (req, res) {
-    res.send(req.isAuthenticated() ? req.user : '0');
-});
-
-/*Logout user*/
-app.post('/logout', function (req, res) {
-    req.logOut();
-    res.send(200);
-});
-
-/*Register user*/
-app.post('/register', function (req, res) {
-    var newUser = req.body;
-    newUser.roles = ['student'];
-    UserModel.findOne({ username: newUser.username }, function (err, user) {
-        if (err) { return next(err); }
-        if (user) {
-            res.json(null);
-            return;
-        }
-        var newUser = new UserModel(req.body);
-        newUser.save(function (err, user) {
-            req.login(user, function (err) {
-                if (err) { return next(err); }
-                res.json(user);
-            });
-        });
-    });
-});
-
-var auth = function (req, res, next) {
-    if (!req.isAuthenticated())
-        res.send(401);
-    else
-        next();
-};
-
-/**********END LOGIN**********/
-
-app.get('/process', function (req, res) {
+app.get('/process', function(req, res){
 	res.json(process.env);
 });
 
@@ -135,10 +81,6 @@ app.get('/add', function (req, res) {
 
 app.get('/update', function (req, res) {
     res.sendFile(path.join(__dirname + '/public/update.html'));
-});
-
-app.get('/nav', function (req, res) {
-    res.sendFile(path.join(__dirname + '/public/login/passport.html'));
 });
 
 /*without mongo
@@ -266,40 +208,6 @@ app.put("/player/:id", function (req, res) {
         });
     });
 });
-
-app.get("/user", function (req, res) {
-    UserModel.find(function (err, data) {
-        res.json(data);
-    });
-});
-
-app.get("/user/:id", function (req, res) {
-    UserModel.findById(req.params.id, function (err, data) {
-        res.json(data);
-    });
-});
-
-app.post("/user", function (req, res) {
-    var newUser = new UserModel({
-        username: req.body.username,
-        password: req.body.password
-    })
-
-    /*ASYNC 1: save*/
-    newUser.save(function (err) {
-        if (err) {
-            console.log('User: ' + req.body.username + ' not inserted');
-        } else {
-            console.log('User: ' + req.body.username + ' inserted');
-        }
-        /*ASYNC 2: find all*/
-        UserModel.find(function (err, data) {
-            res.json(data);
-        });
-    });
-});
-
-
 
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;

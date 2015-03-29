@@ -1,44 +1,38 @@
 ﻿var app = angular.module("HelloWorldApp", []);
 
-
-app.controller("HelloWorldController", function ($scope,$http) {
+app.controller("HelloWorldController", function ($scope, $http, PlayerService) {
     $scope.msg = 'Hello from controller';
 
     $scope.addUser = function (player) {
-       $http.post("/player" ,player)
-       .success(function (response) {
+        PlayerService.addPlayer(player, function (response) {
            $scope.players = response;
         });
        $scope.player = new Object();
     }
 
     $scope.getDev = function () {
-        $http.get('/player')
-        .success(function (response) {
+        PlayerService.getAllPlayer(function (response) {
             $scope.players = response
             console.log($scope.players);
         });
     }
 
     $scope.delete = function (id) {
-        $http.delete('/player/' + id)
-        .success(function (response) {
+        PlayerService.deletePlayer(id, function (response) {
             $scope.players = response;
         });
     }
 
     $scope.selectedIndex = null;
     $scope.edit = function (id) {
-        $http.get('/player/' + id)
-        .success(function (response) {
+        PlayerService.getPlayerById(id, function (response) {
             $scope.player = response;
         });
         $scope.selectedIndex = id;
     }
 
     $scope.updateUser = function () {
-        $http.put('/player/' + $scope.selectedIndex, $scope.player)
-        .success(function (response) {
+        PlayerService.updatePlayer($scope.selectedIndex, $scope.player, function (response) {
             $scope.players = response;
         });
         $scope.player = new Object();

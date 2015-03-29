@@ -1,0 +1,97 @@
+﻿<! DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login :: PassportJS App</title>
+    <meta charset="utf-8">
+    <script src="../javascript/jquery/jquery-1.11.2.min.js"></script>
+    <script src="../javascript/bootstrap/bootstrap.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap/bootstrap.min.css" />
+
+    <script src="../javascript/angular/angular.min.js"></script>
+    <script src="../javascript/angular/angular-route.min.js"></script>
+    
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/codesnippets/sons-of-obsidian.css" />
+
+    <script src="../login/scripts/3.js"></script>
+    <script src="../login/scripts/NavController.js"></script>
+    <script src="../login/scripts/UserService.js"></script>
+    <script src="../login/scripts/ProfileController.js"></script>
+    <link rel="stylesheet" href="../login/css/1.css" />
+
+</head>
+<body ng-app="AngularApp">
+   
+    <div class="container">
+        
+        <!-- Fixed navbar -->
+        <nav ng-controller="NavController" class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#home">Bulletin Board</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a ng-show="rootUser" href="#profilep">Profile</a></li>
+                    </ul>
+
+
+                    <form ng-show="!rootUser" class="navbar-form navbar-right">
+                        <div class="form-group">
+                            <input ng-model="user.username" type="text" placeholder="Username" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input ng-model="user.password" type="password" placeholder="Password" class="form-control">
+                        </div>
+                        <button ng-show="!rootUser" ng-click="login_p(user)" type="submit" class="btn btn-success">Sign in</button>
+                    </form>
+
+                    <form ng-show="!rootUser" class="navbar-form nav-right" action="#/register" method="get">
+                        <button class="btn btn-warning">Register</button>
+                    </form>
+
+                    <form ng-show="rootUser" class="navbar-form navbar-right">
+                        <label>Welcome {{rootUser.username}}</label>
+                        <button ng-show="rootUser" ng-click="logout_p()" type="submit" class="btn btn-danger">Logout</button>
+                    </form>
+                </div><!--/.nav-collapse -->
+            </div>
+        </nav>
+        <!-- Fixed navbar ends-->
+        
+        
+        <div ng-view>
+        </div>
+
+
+        <hr />
+        <h3>Few credentials</h3>
+        <div class="row">
+            <div class="col-md-1">
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <td>Username</td>
+                            <td>Password</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>mit</td><td>mit</td></tr>
+                        <tr><td>admin</td><td>admin</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div> 
+        
+        </div>
+    
+</body>
+</html>

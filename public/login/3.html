@@ -1,0 +1,143 @@
+﻿<! DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Angular App</title>
+    <meta charset="utf-8">
+    <script src="../javascript/jquery/jquery-1.11.2.min.js"></script>
+    <script src="../javascript/bootstrap/bootstrap.js"></script>
+    
+    <script src="../javascript/angular/angular.min.js"></script>
+    <script src="../javascript/angular/angular-route.min.js"></script>
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+
+    <script src="scripts/3.js"></script>
+    <script src="scripts/NavController.js"></script>
+    <script src="scripts/UserService.js"></script>
+    <script src="scripts/ProfileController.js"></script>
+
+
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="../css/codesnippets/sons-of-obsidian.css" />
+    <link rel="stylesheet" href="css/1.css" />
+
+</head>
+<body ng-app="AngularApp">
+   
+    <div class="container">
+        
+        <!-- Fixed navbar -->
+        <nav ng-controller="NavController" class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#home">Bulletin Board</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a ng-show="currentUser" href="#profile">Profile</a></li>
+                    </ul>
+
+
+                    <form ng-show="!currentUser" class="navbar-form navbar-right">
+                        <div class="form-group">
+                            <input ng-model="username" type="text" placeholder="Username" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input ng-model="password" type="password" placeholder="Password" class="form-control">
+                        </div>
+                        <button ng-show="!currentUser" ng-click="login()" type="submit" class="btn btn-success">Sign in</button>
+                    </form>
+                    <form ng-show="currentUser" class="navbar-form navbar-right">
+                        <label>Welcome {{currentUser.username}}</label>
+                        <button ng-show="currentUser" ng-click="logout(currentUser.username)" type="submit" class="btn btn-danger">Logout</button>
+                    </form>
+                </div><!--/.nav-collapse -->
+            </div>
+        </nav>
+        <!-- Fixed navbar ends-->
+        
+        
+        <div ng-view>
+        </div>
+        
+        <hr />
+        <div>
+             <h1>Passing data between multiple controllers using Factory</h1>
+
+            <p>
+                We want to exchange data with multiple controllers using Factory. <br/>
+                In the <a href="2.html">previous experiment </a>, the NavController set the currentUser in the UserService<br />
+                In this experiment we will extract the currentUser information from another controller called The ProfileController
+
+                
+                Predefined credentails are
+            </p>
+                <div class="row">
+                    <div class="col-md-1">
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <td>Username</td>
+                                    <td>Password</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>mit</td><td>mit</td></tr>
+                                <tr><td>admin</td><td>admin</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div> 
+
+
+            <b>Code Snippets</b><br /><br/>
+            <i>ProfileController.js:</i>
+            <pre class="prettyprint">
+                app.controller('ProfileController', ['$scope', 'UserService', function ($scope, UserService) {
+                    console.log('Inside ProfileController');
+                    $scope.init = function () {
+                        console.log('inside init')
+                        var currentUser = UserService.getCurrentUser();
+                        if (currentUser != null) {
+                            $scope.username = currentUser.username;
+                        } else {
+                        }
+                    }
+                }]);
+            </pre>
+
+
+        </div>
+        <div>
+            <b>Source Code:</b>
+            <a href="http://net4.ccs.neu.edu/home/mit09/fileview/Default.aspx?~/experiments/angular_p/3.html" target="_blank">HTML</a>
+            <b>|</b>
+            <a href="http://net4.ccs.neu.edu/home/mit09/fileview/Default.aspx?~/experiments/angular_p/scripts/3.js" target="_blank"> Routing</a>
+            <b>|</b>
+            <a href="http://net4.ccs.neu.edu/home/mit09/fileview/Default.aspx?~/experiments/angular_p/scripts/NavController.js" target="_blank"> Controller</a>
+            <b>|</b>
+            <a href="http://net4.ccs.neu.edu/home/mit09/fileview/Default.aspx?~/experiments/angular_p/scripts/UserService.js" target="_blank"> Factory</a>
+            <b>|</b>
+            <a href="http://net4.ccs.neu.edu/home/mit09/fileview/Default.aspx?~/css/angular_app/1.css" target="_blank"> CSS</a>
+            <br />
+            <br />
+            <b>References:</b>
+            <ol>
+                <li><a href="https://plus.google.com/u/0/events/clvi3kt97lvt3dhkhddvrm4nhqg" target="_blank">Prof. Jose lecture</a></li>
+                <li><a href="https://code.google.com/p/google-code-prettify/" target="_blank"> Display code snippet using google-code-prettify</a></li>
+                <li><a href="http://getbootstrap.com/getting-started/" target="_blank"> Bootstrap template</a></li>
+                
+            </ol>
+        </div>
+    </div>  
+    
+    
+</body>
+</html>

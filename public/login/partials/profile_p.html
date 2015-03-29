@@ -1,0 +1,9 @@
+﻿<div ng-controller="ProfileController" ng-init="init()">
+    <div ng-show="rootUser.username">
+        <h1>PROFILE</h1>
+        Hello {{rootUser.username}}
+    </div>
+    <div ng-show="!rootUser.username">
+        <b><font color="red">Please login to view profile.</font></b>
+    </div>
+</div>
